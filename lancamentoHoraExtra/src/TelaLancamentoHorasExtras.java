@@ -19,7 +19,6 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-
 public class TelaLancamentoHorasExtras {
     // Variáveis para armazenar as informações inseridas
 
@@ -47,8 +46,6 @@ public class TelaLancamentoHorasExtras {
         JFrame frame = new JFrame("Lançamento de Horas Extras");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 470);
-
-
 
         JPanel panel = new JPanel();
         Color corFundo = new Color(112, 128, 144); // Cor azul escuro
@@ -175,7 +172,7 @@ public class TelaLancamentoHorasExtras {
             // Código para processar os dados inseridos, por exemplo, salvando-os em uma estrutura de dados ou enviando-os para um banco de dados
             Connection conexao = Conexao.getConnection();
 
-            try{
+            try {
                 PreparedStatement stmt = conexao.prepareStatement("INSERT INTO apontamento (data_inicio, data_final, hora_inicio, hora_final, nome_cliente, nome_projeto, justificativa) VALUES (?, ?, ?, ?, ?, ?, ?)");
                 stmt.setString(1, dataHorasExtras); //colocar data inicial
                 stmt.setString(2, dataFinal); //colocar data final ( ta dando erro pq ainda n foi criado a data final)
@@ -188,10 +185,10 @@ public class TelaLancamentoHorasExtras {
                 stmt.executeUpdate();
             } catch (SQLException ex) {
                 System.out.println("Erro ao salvar" + ex.getMessage());
-            }finally {
-                try{
+            } finally {
+                try {
                     conexao.close();
-                }catch (SQLException ex){
+                } catch (SQLException ex) {
                     System.out.println("Erro");
                 }
             }
@@ -209,8 +206,6 @@ public class TelaLancamentoHorasExtras {
 
 
         panel.add(botaoLancar);
-
-
 
         frame.add(panel);
         frame.setLocationRelativeTo(null);
