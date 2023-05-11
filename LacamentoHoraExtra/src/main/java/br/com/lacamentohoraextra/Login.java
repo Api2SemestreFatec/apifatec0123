@@ -159,32 +159,38 @@ public class Login extends javax.swing.JFrame {
         String passwordField = new String(password.getPassword());
 
         try {
-            String role = LoginDAO.getPerfil(usernameField, passwordField);
+            String role;
+            role = LoginDAO.getPerfil(usernameField, passwordField);
             switch (role) {
-                case "1" -> {
-                    Administrador adm = new Administrador();
-                    adm.setVisible(true);
+                case "1":
                     dispose();
-                }
-                case "2" -> {
+                    setVisible(false);
+                    Administrador adm = new Administrador();
+                    adm.setTitle("Administrador");
+                    adm.setVisible(true);
+                    break;
+                case "2":
                     System.out.println(Login.this);
                     JOptionPane.showMessageDialog(Login.this, "Welcome, moderator!");
-                }
-                case "3" -> {
-                    Colaborador colaborador = new Colaborador();
-                    colaborador.setVisible(true);
+                    break;
+                case "3":
                     dispose();
-                }
-                default ->
+                    setVisible(false);
+                    Colaborador c = new Colaborador();
+                    c.setTitle("Colaborador");
+                    c.setVisible(true);
+                    break;
+                default:
                     System.out.println("DEU RUIM");
+                    break;
             }
         }
         catch (SQLException e) {
             Logger.getLogger(
-                            ConexaoSQL.class.getName()).log(
-                            Level.SEVERE,
-                            e.getMessage(),
-                            e);
+                    ConexaoSQL.class.getName()).log(
+                    Level.SEVERE,
+                    e.getMessage(),
+                    e);
             JOptionPane.showMessageDialog(Login.this, "Database connection failed: " + e.getMessage());
 
         }
@@ -222,10 +228,8 @@ public class Login extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Login().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Login().setVisible(true);
         });
     }
 

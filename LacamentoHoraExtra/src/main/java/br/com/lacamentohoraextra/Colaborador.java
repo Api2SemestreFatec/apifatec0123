@@ -23,16 +23,22 @@
  */
 package br.com.lacamentohoraextra;
 
+import br.com.lacamentohoraextra.DAO.ConexaoSQL;
 import br.com.lacamentohoraextra.Views.ApontamentoHistorico;
 import br.com.lacamentohoraextra.Views.ApontamentoHoraExtra;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import java.awt.BorderLayout;
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
  * @author daviramos
  */
-public class Colaborador extends javax.swing.JFrame {
+public final class Colaborador extends javax.swing.JFrame {
 
     /**
      * Creates new form Colaborador
@@ -43,14 +49,7 @@ public class Colaborador extends javax.swing.JFrame {
     }
 
     public void init() {
-        ApontamentoHoraExtra apontamentoHoraExtra = new ApontamentoHoraExtra();
-        apontamentoHoraExtra.setSize(content.getWidth(), content.getHeight());
-        apontamentoHoraExtra.setLocation(0, 0);
-
-        content.removeAll();
-        content.add(apontamentoHoraExtra, BorderLayout.CENTER);
-        content.revalidate();
-        content.repaint();
+        showApontamento(ApontamentoHoraExtra.class);
     }
 
     /**
@@ -187,33 +186,41 @@ public class Colaborador extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnApontamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApontamentoActionPerformed
-        ApontamentoHoraExtra apontamentoHoraExtra = new ApontamentoHoraExtra();
-        apontamentoHoraExtra.setSize(content.getWidth(), content.getHeight());
-        apontamentoHoraExtra.setLocation(0, 0);
-
-        content.removeAll();
-        content.add(apontamentoHoraExtra, BorderLayout.CENTER);
-        content.revalidate();
-        content.repaint();
+        showApontamento(ApontamentoHoraExtra.class);
     }//GEN-LAST:event_btnApontamentoActionPerformed
 
     private void btnHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistoricoActionPerformed
-        ApontamentoHistorico apontamentoHistorico = new ApontamentoHistorico();
-        apontamentoHistorico.setSize(content.getWidth(), content.getHeight());
-        apontamentoHistorico.setLocation(0, 0);
-
-        content.removeAll();
-        content.add(apontamentoHistorico, BorderLayout.CENTER);
-        content.revalidate();
-        content.repaint();
+        showApontamento(ApontamentoHistorico.class);
     }//GEN-LAST:event_btnHistoricoActionPerformed
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
-        Login login = new Login();
         this.dispose();
+        Login login = new Login();
         login.setVisible(true);
-        
+
     }//GEN-LAST:event_btnSairActionPerformed
+
+    private void showApontamento(Class<?> apontamentoClass) {
+        try {
+            JPanel apontamentoPanel = (JPanel) apontamentoClass.getDeclaredConstructor().newInstance();
+            apontamentoPanel.setSize(content.getWidth(), content.getHeight());
+            apontamentoPanel.setLocation(0, 0);
+
+            content.removeAll();
+            content.add(apontamentoPanel, BorderLayout.CENTER);
+            content.revalidate();
+            content.repaint();
+        }
+        catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
+            Logger.getLogger(
+                    ConexaoSQL.class.getName()).log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex);
+            JOptionPane.showMessageDialog(Colaborador.this, "Database connection failed: " + ex.getMessage());
+
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -249,11 +256,9 @@ public class Colaborador extends javax.swing.JFrame {
         FlatIntelliJLaf.setup();
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            public void run() {
-                new Colaborador().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            Colaborador colaborador = new Colaborador();
+            colaborador.setVisible(true);
         });
     }
 
