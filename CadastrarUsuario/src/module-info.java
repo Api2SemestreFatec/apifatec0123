@@ -5,6 +5,7 @@
  * @author HP
  *
  */
-module TelaAdmin {
+module CadastrarUsuario {
 	requires java.desktop;
+	requires java.sql;
 }

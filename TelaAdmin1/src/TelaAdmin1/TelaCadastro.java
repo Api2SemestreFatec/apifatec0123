@@ -1,10 +1,22 @@
-package TelaAdmin; 
+package TelaAdmin1;
 
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class TelaCadastro extends JFrame implements ActionListener {
 
@@ -17,11 +29,11 @@ public class TelaCadastro extends JFrame implements ActionListener {
         setSize(400, 300);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-     // desabilita a maximização da janela
+        // desabilita a maximização da janela
         setResizable(false);
 
         // Criação dos botões
-        btnCliente = new JButton("Cadastro de Clientes");
+        btnCliente = new JButton("Cadastrar Cliente");
         btnUsuario = new JButton("Cadastro de Usuários");
         btnCR = new JButton("Cadastro de CRs");
         btnProjeto = new JButton("Cadastro de Projetos");
@@ -39,8 +51,8 @@ public class TelaCadastro extends JFrame implements ActionListener {
                 Graphics2D g2d = (Graphics2D) g.create();
                 Point2D start = new Point2D.Float(0, 0);
                 Point2D end = new Point2D.Float(0, getHeight());
-                float[] dist = {0.0f, 0.5f, 1.0f};
-                Color[] colors = {Color.BLACK, Color.GRAY, Color.WHITE};
+                float[] dist = { 0.0f, 0.5f, 1.0f };
+                Color[] colors = { Color.BLACK, Color.GRAY, Color.WHITE };
                 g2d.setPaint(new GradientPaint(start, colors[0], end, colors[2]));
                 g2d.fillRect(0, 0, getWidth(), getHeight());
                 g2d.dispose();
@@ -75,20 +87,20 @@ public class TelaCadastro extends JFrame implements ActionListener {
         btn.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
     }
     private void setBotaoEsquerda(JButton btnCliente) {
-		// TODO Auto-generated method stub
-		
-	}
+        // TODO Auto-generated method stub
 
-	public void actionPerformed(ActionEvent e) {
+    }
+
+    public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnCliente) {
-        	// Cria uma nova instância da classe CadastrarClientes
-            CadastrarCliente cadastrarClientes = new CadastrarCliente();
+            // Cria uma nova instância da classe CadastrarClientes
+            CadastrarCliente cliente = new CadastrarCliente();
+            cliente.setVisible(true);
 
-            // Exibe a janela de cadastro de clientes
-            cadastrarClientes.exibir();
         } else if (e.getSource() == btnUsuario) {
-            // Chama tela de cadastro de usuários
-            // ...
+            CadastrarUsuario usuario = new CadastrarUsuario();
+            usuario.setVisible(true);
+            
         } else if (e.getSource() == btnCR) {
             // Chama tela de cadastro de CRs
             // ...
@@ -96,13 +108,13 @@ public class TelaCadastro extends JFrame implements ActionListener {
             // Chama tela de cadastro de projetos
             // ...
         }
-     
+
     }
-    
+
     public static void main(String[] args) {
-        TelaCadastro tela = new TelaCadastro();
-        
-        tela.setVisible(true);
-       
+        SwingUtilities.invokeLater(() -> {
+            TelaCadastro tela = new TelaCadastro();
+            tela.setVisible(true);
+        });
     }
 }
