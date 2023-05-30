@@ -23,9 +23,23 @@
  */
 package br.com.lacamentohoraextra.utils;
 
-public class DateChooserException extends RuntimeException {
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
-    public DateChooserException(String errorMessage) {
-        super(errorMessage);
+public class ValidadorData {
+
+    private static final String FORMATO_DATA = "dd-MM-yyyy";
+
+    public static boolean validarData(String data) {
+        DateTimeFormatter formatador = DateTimeFormatter.ofPattern(FORMATO_DATA);
+
+        try {
+            LocalDate.parse(data, formatador);
+            return true;
+        }
+        catch (DateTimeParseException ex) {
+            return false;
+        }
     }
 }

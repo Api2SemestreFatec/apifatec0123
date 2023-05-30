@@ -23,9 +23,26 @@
  */
 package br.com.lacamentohoraextra.utils;
 
-public class DateChooserException extends RuntimeException {
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
-    public DateChooserException(String errorMessage) {
-        super(errorMessage);
+public class LimitarDocumento extends PlainDocument {
+
+    private final int limiteCaracteres;
+
+    public LimitarDocumento(int limiteCaracteres) {
+        this.limiteCaracteres = limiteCaracteres;
+    }
+
+    @Override
+    public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
+        if (str == null) {
+            return;
+        }
+
+        if ((getLength() + str.length()) <= limiteCaracteres) {
+            super.insertString(offset, str, attr);
+        }
     }
 }

@@ -21,11 +21,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package br.com.lacamentohoraextra.utils;
+package br.com.lacamentohoraextra.Models;
 
-public class DateChooserException extends RuntimeException {
+import javax.swing.table.AbstractTableModel;
 
-    public DateChooserException(String errorMessage) {
-        super(errorMessage);
+/**
+ *
+ * @author daviramos
+ */
+public class TabelaModelo extends AbstractTableModel {
+
+    private final Object[][] dados;
+    private final String[] colunas;
+
+    public TabelaModelo(Object[][] dados, String[] colunas) {
+        this.dados = dados;
+        this.colunas = colunas;
+    }
+
+    @Override
+    public int getColumnCount() {
+        return colunas.length;
+    }
+
+    @Override
+    public int getRowCount() {
+        return dados.length;
+    }
+
+    @Override
+    public String getColumnName(int col) {
+        return colunas[col];
+    }
+
+    @Override
+    public Object getValueAt(int row, int col) {
+        return dados[row][col];
+    }
+
+    @Override
+    public boolean isCellEditable(int row, int col) {
+        return false;
+    }
+
+    @Override
+    public void setValueAt(Object valor, int row, int col) {
+        dados[row][col] = valor;
+        fireTableCellUpdated(row, col);
     }
 }

@@ -23,8 +23,8 @@
  */
 package br.com.lacamentohoraextra;
 
-import br.com.lacamentohoraextra.Views.ApontamentoHistorico;
-import br.com.lacamentohoraextra.Views.ApontamentoHoraExtra;
+import br.com.lacamentohoraextra.Views.Dashboard;
+import br.com.lacamentohoraextra.Views.TelaAprovacao;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import java.awt.BorderLayout;
 import java.lang.reflect.InvocationTargetException;
@@ -37,20 +37,48 @@ import javax.swing.JPanel;
  *
  * @author daviramos
  */
-public final class Colaborador extends javax.swing.JFrame {
+public class Gestor extends javax.swing.JFrame {
 
     /**
-     * Creates new form Colaborador
+     * Creates new form Gestor
      */
-    public Colaborador() {
+    public Gestor() {
         initComponents();
         init();
     }
 
     public void init() {
-        btnApontamento.setSelected(false);
-        btnHistorico.setSelected(true);
-        showApontamento(ApontamentoHoraExtra.class);
+        btnAprovacao.setSelected(false);
+        btnDashboard.setSelected(true);
+        btnLancamento.setSelected(false);
+        showApontamento(TelaAprovacao.class);
+    }
+
+    private void showApontamento(Class<?> gestorClass) {
+        try {
+            JPanel gestorPanel = (JPanel) gestorClass.getDeclaredConstructor().newInstance();
+            gestorPanel.setSize(content.getWidth(), content.getHeight());
+            gestorPanel.setLocation(0, 0);
+
+            content.removeAll();
+            content.add(gestorPanel, BorderLayout.CENTER);
+            content.revalidate();
+            content.repaint();
+        }
+        catch (InstantiationException
+                | IllegalAccessException
+                | NoSuchMethodException
+                | InvocationTargetException ex) {
+            Logger.getLogger(
+                    Gestor.class.getName()).log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex);
+            JOptionPane.showMessageDialog(
+                    Gestor.this,
+                    "Database connection failed: " + ex.getMessage());
+
+        }
     }
 
     /**
@@ -64,43 +92,54 @@ public final class Colaborador extends javax.swing.JFrame {
 
         container = new javax.swing.JPanel();
         sidebarmenu = new javax.swing.JPanel();
-        btnApontamento = new javax.swing.JButton();
-        btnHistorico = new javax.swing.JButton();
+        btnDashboard = new javax.swing.JButton();
+        btnLancamento = new javax.swing.JButton();
+        btnAprovacao = new javax.swing.JButton();
         btnSair = new javax.swing.JButton();
         content = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
         setMinimumSize(new java.awt.Dimension(940, 600));
+        setName("gestorFrame"); // NOI18N
         setResizable(false);
 
-        container.setBackground(new java.awt.Color(204, 255, 255));
-        container.setForeground(new java.awt.Color(0, 51, 102));
+        container.setBackground(new java.awt.Color(255, 255, 255));
+        container.setForeground(new java.awt.Color(0, 0, 102));
+        container.setFont(new java.awt.Font("Liberation Sans", 0, 14)); // NOI18N
         container.setMinimumSize(new java.awt.Dimension(940, 600));
+        container.setPreferredSize(new java.awt.Dimension(940, 600));
 
         sidebarmenu.setBackground(new java.awt.Color(0, 51, 102));
+        sidebarmenu.setForeground(new java.awt.Color(0, 51, 102));
 
-        btnApontamento.setBackground(new java.awt.Color(255, 255, 255));
-        btnApontamento.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
-        btnApontamento.setForeground(new java.awt.Color(153, 204, 255));
-        btnApontamento.setText("Apontamento");
-        btnApontamento.setBorder(null);
-        btnApontamento.setContentAreaFilled(false);
-        btnApontamento.addActionListener(new java.awt.event.ActionListener() {
+        btnDashboard.setBackground(new java.awt.Color(255, 255, 255));
+        btnDashboard.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
+        btnDashboard.setForeground(new java.awt.Color(153, 204, 255));
+        btnDashboard.setText("Dashboard");
+        btnDashboard.setBorder(null);
+        btnDashboard.setContentAreaFilled(false);
+        btnDashboard.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnApontamentoActionPerformed(evt);
+                btnDashboardActionPerformed(evt);
             }
         });
 
-        btnHistorico.setBackground(new java.awt.Color(255, 255, 255));
-        btnHistorico.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
-        btnHistorico.setForeground(new java.awt.Color(153, 204, 255));
-        btnHistorico.setText("Histórico");
-        btnHistorico.setBorder(null);
-        btnHistorico.setContentAreaFilled(false);
-        btnHistorico.addActionListener(new java.awt.event.ActionListener() {
+        btnLancamento.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
+        btnLancamento.setForeground(new java.awt.Color(153, 204, 255));
+        btnLancamento.setText("Lançamentos");
+        btnLancamento.setBorder(null);
+        btnLancamento.setContentAreaFilled(false);
+        btnLancamento.setEnabled(false);
+
+        btnAprovacao.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
+        btnAprovacao.setForeground(new java.awt.Color(153, 204, 255));
+        btnAprovacao.setText("Aprovações");
+        btnAprovacao.setBorder(null);
+        btnAprovacao.setContentAreaFilled(false);
+        btnAprovacao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHistoricoActionPerformed(evt);
+                btnAprovacaoActionPerformed(evt);
             }
         });
 
@@ -124,21 +163,24 @@ public final class Colaborador extends javax.swing.JFrame {
             .addGroup(sidebarmenuLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(sidebarmenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnHistorico, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnApontamento, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
-                    .addComponent(btnSair, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnDashboard, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnLancamento, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+                    .addComponent(btnAprovacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnSair, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         sidebarmenuLayout.setVerticalGroup(
             sidebarmenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(sidebarmenuLayout.createSequentialGroup()
                 .addGap(90, 90, 90)
-                .addComponent(btnApontamento, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnHistorico, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 353, Short.MAX_VALUE)
+                .addComponent(btnDashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnLancamento, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnAprovacao, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 290, Short.MAX_VALUE)
                 .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25))
+                .addGap(24, 24, 24))
         );
 
         content.setBackground(new java.awt.Color(255, 255, 255));
@@ -149,7 +191,7 @@ public final class Colaborador extends javax.swing.JFrame {
         content.setLayout(contentLayout);
         contentLayout.setHorizontalGroup(
             contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 764, Short.MAX_VALUE)
+            .addGap(0, 752, Short.MAX_VALUE)
         );
         contentLayout.setVerticalGroup(
             contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -163,23 +205,27 @@ public final class Colaborador extends javax.swing.JFrame {
             .addGroup(containerLayout.createSequentialGroup()
                 .addComponent(sidebarmenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, 752, Short.MAX_VALUE))
         );
         containerLayout.setVerticalGroup(
             containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(sidebarmenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(content, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(container, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(container, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(container, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(container, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -190,47 +236,21 @@ public final class Colaborador extends javax.swing.JFrame {
         this.dispose();
         Login login = new Login();
         login.setVisible(true);
-
     }//GEN-LAST:event_btnSairActionPerformed
 
-    private void btnHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistoricoActionPerformed
-        btnApontamento.setSelected(true);
-        btnHistorico.setSelected(false);
-        showApontamento(ApontamentoHistorico.class);
-    }//GEN-LAST:event_btnHistoricoActionPerformed
+    private void btnAprovacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAprovacaoActionPerformed
+        btnAprovacao.setSelected(true);
+        btnDashboard.setSelected(false);
+        btnLancamento.setSelected(false);
+        showApontamento(TelaAprovacao.class);
+    }//GEN-LAST:event_btnAprovacaoActionPerformed
 
-    private void btnApontamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApontamentoActionPerformed
-        btnApontamento.setSelected(false);
-        btnHistorico.setSelected(true);
-        showApontamento(ApontamentoHoraExtra.class);
-    }//GEN-LAST:event_btnApontamentoActionPerformed
-
-    private void showApontamento(Class<?> apontamentoClass) {
-        try {
-            JPanel apontamentoPanel = (JPanel) apontamentoClass.getDeclaredConstructor().newInstance();
-            apontamentoPanel.setSize(content.getWidth(), content.getHeight());
-            apontamentoPanel.setLocation(0, 0);
-
-            content.removeAll();
-            content.add(apontamentoPanel, BorderLayout.CENTER);
-            content.revalidate();
-            content.repaint();
-        }
-        catch (InstantiationException 
-                | IllegalAccessException 
-                | NoSuchMethodException 
-                | InvocationTargetException ex) {
-            Logger.getLogger(
-                    Colaborador.class.getName()).log(
-                    Level.SEVERE,
-                    ex.getMessage(),
-                    ex);
-            JOptionPane.showMessageDialog(
-                    Colaborador.this, 
-                    "Database connection failed: " + ex.getMessage());
-
-        }
-    }
+    private void btnDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardActionPerformed
+        btnAprovacao.setSelected(false);
+        btnDashboard.setSelected(true);
+        btnLancamento.setSelected(false);
+        showApontamento(Dashboard.class);
+    }//GEN-LAST:event_btnDashboardActionPerformed
 
     /**
      * @param args the command line arguments
@@ -243,14 +263,15 @@ public final class Colaborador extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new Colaborador().setVisible(true);
+                new Gestor().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnApontamento;
-    private javax.swing.JButton btnHistorico;
+    private javax.swing.JButton btnAprovacao;
+    private javax.swing.JButton btnDashboard;
+    private javax.swing.JButton btnLancamento;
     private javax.swing.JButton btnSair;
     private javax.swing.JPanel container;
     private javax.swing.JPanel content;

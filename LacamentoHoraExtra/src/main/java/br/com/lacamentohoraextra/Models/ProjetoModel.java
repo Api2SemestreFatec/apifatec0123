@@ -21,11 +21,62 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package br.com.lacamentohoraextra.utils;
+package br.com.lacamentohoraextra.Models;
 
-public class DateChooserException extends RuntimeException {
+/**
+ *
+ * @author daviramos
+ */
+public class ProjetoModel {
+    private String nome;
+    private String cliente;
+    private String verba;
+    private String prazo;
 
-    public DateChooserException(String errorMessage) {
-        super(errorMessage);
+    public ProjetoModel() {
     }
+
+    public ProjetoModel(String nome, String cliente, String verba, String prazo) {
+        this.nome = nome;
+        this.cliente = cliente;
+        this.verba = verba;
+        this.prazo = prazo;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
+    }
+
+    public String getVerba() {
+        return verba;
+    }
+
+    public void setVerba(String verba) {
+        this.verba = verba;
+    }
+
+    public String getPrazo() {
+        return prazo;
+    }
+
+    public void setPrazo(String prazo) {
+        this.prazo = prazo;
+    }
+
+    @Override
+    public String toString() {
+        return this.nome;
+    }    
 }

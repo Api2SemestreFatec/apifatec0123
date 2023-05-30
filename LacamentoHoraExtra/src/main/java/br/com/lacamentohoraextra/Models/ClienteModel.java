@@ -27,42 +27,66 @@ package br.com.lacamentohoraextra.Models;
  *
  * @author daviramos
  */
-public class LoginModel {
+public class ClienteModel {
+    private String nomeCliente;
+    private String setor;
+    private String cnpj;
+    private String telefone;
+    private String email;
 
-    private String nomeUsuario;
-    private String senha;
-    private Integer nivelAcesso;
-
-    public LoginModel() {
+    public ClienteModel() {
     }
 
-    public LoginModel(String nomeUsuario, String senha, Integer nivelAcesso) {
-        this.nomeUsuario = nomeUsuario;
-        this.senha = senha;
-        this.nivelAcesso = nivelAcesso;
+    public ClienteModel(String nomeCliente, String setor, String cnpj, String telefone, String email) {
+        this.nomeCliente = nomeCliente;
+        this.setor = setor;
+        this.cnpj = cnpj;
+        this.telefone = telefone;
+        this.email = email;
     }
 
-    public String getNomeUsuario() {
-        return nomeUsuario;
+    public String getNomeCliente() {
+        return nomeCliente;
     }
 
-    public void setNomeUsuario(String nomeUsuario) {
-        this.nomeUsuario = nomeUsuario;
+    public void setNomeCliente(String nomeCliente) {
+        this.nomeCliente = nomeCliente;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getSetor() {
+        return setor;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setSetor(String setor) {
+        this.setor = setor;
     }
 
-    public Integer getNivelAcesso() {
-        return nivelAcesso;
+    public String getCnpj() {
+        return cnpj;
     }
 
-    public void setNivelAcesso(Integer nivelAcesso) {
-        this.nivelAcesso = nivelAcesso;
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return this.nomeCliente;
     }
 }

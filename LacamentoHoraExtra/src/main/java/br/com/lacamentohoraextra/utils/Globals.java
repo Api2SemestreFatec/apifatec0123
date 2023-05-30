@@ -21,29 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package br.com.lacamentohoraextra.Views;
+package br.com.lacamentohoraextra.utils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import javax.swing.JFormattedTextField.AbstractFormatter;
+public class Globals {
 
-public class DateLabelFormatter extends AbstractFormatter {
+    private static int userID;
 
-    private final String datePattern = "dd-MM-yyyy";
-    private final SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
-
-    @Override
-    public Object stringToValue(String text) throws ParseException {
-        return dateFormatter.parseObject(text);
+    public static int getUserID() {
+        return userID;
     }
 
-    @Override
-    public String valueToString(Object value) throws ParseException {
-        if (value != null) {
-            Calendar cal = (Calendar) value;
-            return dateFormatter.format(cal.getTime());
-        }
-        return "";
+    public static void setUserID(int userID) {
+        Globals.userID = userID;
     }
 }

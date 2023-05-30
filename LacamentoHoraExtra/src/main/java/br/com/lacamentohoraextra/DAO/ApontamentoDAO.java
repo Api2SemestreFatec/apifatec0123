@@ -24,6 +24,7 @@
 package br.com.lacamentohoraextra.DAO;
 
 import br.com.lacamentohoraextra.Models.ApontamentoModel;
+import br.com.lacamentohoraextra.utils.Globals;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -50,24 +51,26 @@ public class ApontamentoDAO {
             ResultSet resultSet;
 
             try {
-                String query = "SELECT * FROM apontamento";
+                String query = "SELECT cliente_projeto, datahora_inicio, datahora_fim, intervalo, justificativa, situacao"
+                        + " FROM public.vw_colaborador WHERE id_usuario = ? order by situacao ASC";
                 consultaSQL = connection.prepareStatement(query);
+                consultaSQL.setInt(1, Globals.getUserID());
 
                 resultSet = consultaSQL.executeQuery();
 
                 while (resultSet.next()) {
                     ApontamentoModel apontamentoModel = new ApontamentoModel();
 
-                    apontamentoModel.setDataApontamento(resultSet.getString("data_apontamento"));
-                    apontamentoModel.setHoraInicio(resultSet.getString("hora_inicio"));
-                    apontamentoModel.setHoraFinal(resultSet.getString("hora_fim"));
-                    apontamentoModel.setProjeto(resultSet.getString("projeto"));
-                    apontamentoModel.setSolicitante(resultSet.getString("solicitante"));
+                    apontamentoModel.setCliente_projeto(resultSet.getString("cliente_projeto"));
+                    apontamentoModel.setDataInicialApontamento(resultSet.getString("datahora_inicio"));
+                    apontamentoModel.setDataFinalApontamento(resultSet.getString("datahora_fim"));
+                    apontamentoModel.setIntervalo(resultSet.getString("intervalo"));
                     apontamentoModel.setJustificativa(resultSet.getString("justificativa"));
                     apontamentoModel.setSituacao(resultSet.getString("situacao"));
 
                     listaDeApontamento.add(apontamentoModel);
                 }
+                connection.close();
             }
             catch (SQLException e) {
                 Logger.getLogger(
@@ -77,9 +80,169 @@ public class ApontamentoDAO {
                         e);
             }
             finally {
-                connection.close();
+                if (connection != null) {
+                    connection.close();
+                }
             }
         }
+
         return listaDeApontamento;
+    }
+
+    public static ArrayList<ApontamentoModel> listarApontamentosGestor() throws SQLException {
+        ArrayList<ApontamentoModel> listaDeApontamento = new ArrayList<>();
+        Connection connection = ConexaoSQL.iniciarConexao();
+
+        if (ConexaoSQL.status == true) {
+            PreparedStatement consultaSQL;
+            ResultSet resultSet;
+
+            try {
+                String query = "SELECT id_apontamento, cliente_projeto, datahora_inicio, datahora_fim, intervalo, justificativa, nome_usuario, situacao "
+                        + "FROM public.vw_colaborador_apontamentos";
+
+                consultaSQL = connection.prepareStatement(query);
+                resultSet = consultaSQL.executeQuery();
+
+                while (resultSet.next()) {
+                    ApontamentoModel apontamentoModel = new ApontamentoModel();
+
+                    apontamentoModel.setIdApontamento(resultSet.getInt("id_apontamento"));
+                    apontamentoModel.setCliente_projeto(resultSet.getString("cliente_projeto"));
+                    apontamentoModel.setDataInicialApontamento(resultSet.getString("datahora_inicio"));
+                    apontamentoModel.setDataFinalApontamento(resultSet.getString("datahora_fim"));
+                    apontamentoModel.setIntervalo(resultSet.getString("intervalo"));
+                    apontamentoModel.setJustificativa(resultSet.getString("justificativa"));
+                    apontamentoModel.setNomeUsuario(resultSet.getString("nome_usuario"));
+                    apontamentoModel.setSituacao(resultSet.getString("situacao"));
+
+                    listaDeApontamento.add(apontamentoModel);
+                }
+                connection.close();
+            }
+            catch (SQLException e) {
+                Logger.getLogger(
+                        ConexaoSQL.class.getName()).log(
+                        Level.SEVERE,
+                        e.getMessage(),
+                        e);
+            }
+            finally {
+                if (connection != null) {
+                    connection.close();
+                }
+            }
+
+        }
+
+        return listaDeApontamento;
+    }
+    
+    public void updateApontamento(Integer id) {
+        Connection connection = ConexaoSQL.iniciarConexao();
+
+        if (ConexaoSQL.status == true) {
+            String query = "";
+            PreparedStatement consultaSQL = null;
+
+            try {
+                consultaSQL = connection.prepareStatement(query);
+
+//                consultaSQL.setString(1, apontamentoModel.getSituacao());
+
+                consultaSQL.execute();
+            }
+            catch (SQLException e) {
+                Logger.getLogger(
+                        ConexaoSQL.class.getName()).log(
+                        Level.SEVERE,
+                        e.getMessage(),
+                        e);
+            }
+            finally {
+                try {
+                    if (consultaSQL != null) {
+                        consultaSQL.close();
+                    }
+                }
+                catch (SQLException e) {
+                    Logger.getLogger(
+                            ConexaoSQL.class.getName()).log(
+                            Level.SEVERE,
+                            e.getMessage(),
+                            e);
+                }
+
+                try {
+                    if (connection != null) {
+                        connection.close();
+                    }
+                }
+                catch (SQLException e) {
+                    Logger.getLogger(
+                            ConexaoSQL.class.getName()).log(
+                            Level.SEVERE,
+                            e.getMessage(),
+                            e);
+                }
+            }
+        }
+    }
+
+    public void cadastrarApontamento(ApontamentoModel apontamento) {
+        Connection connection = ConexaoSQL.iniciarConexao();
+
+        if (ConexaoSQL.status == true) {
+            String query = "INSERT INTO apontamentos (data_inicio, data_final, hora_inicio, hora_final, nome_cliente, nome_projeto, justificativa) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement consultaSQL = null;
+
+            try {
+                consultaSQL = connection.prepareStatement(query);
+
+                consultaSQL.setString(1, apontamento.getDataInicialApontamento()); //colocar data inicial
+                consultaSQL.setString(2, apontamento.getDataFinalApontamento()); //colocar data final ( ta dando erro pq ainda n foi criado a data final)
+                consultaSQL.setString(3, apontamento.getHoraInicio()); // hora inicial
+                consultaSQL.setString(4, apontamento.getHoraFinal()); // hora final
+                consultaSQL.setString(5, apontamento.getSolicitante()); // nome do cliente
+                consultaSQL.setString(6, apontamento.getProjeto()); // nome do projeto
+                consultaSQL.setString(7, apontamento.getJustificativa()); // justificativa
+
+                consultaSQL.execute();
+            }
+            catch (SQLException e) {
+                Logger.getLogger(
+                        ConexaoSQL.class.getName()).log(
+                        Level.SEVERE,
+                        e.getMessage(),
+                        e);
+            }
+            finally {
+                try {
+                    if (consultaSQL != null) {
+                        consultaSQL.close();
+                    }
+                }
+                catch (SQLException e) {
+                    Logger.getLogger(
+                            ConexaoSQL.class.getName()).log(
+                            Level.SEVERE,
+                            e.getMessage(),
+                            e);
+                }
+
+                try {
+                    if (connection != null) {
+                        connection.close();
+                    }
+                }
+                catch (SQLException e) {
+                    Logger.getLogger(
+                            ConexaoSQL.class.getName()).log(
+                            Level.SEVERE,
+                            e.getMessage(),
+                            e);
+                }
+            }
+        }
     }
 }
